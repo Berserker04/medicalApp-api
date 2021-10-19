@@ -15,25 +15,22 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        DB::table("roles")->insert([
-            "name" => "SuperAdmin",
-            "user_id" => null,
-            "state" => 1,
-            'created_at' => new DateTime(),
-            'updated_at' => new DateTime(),
-        ]);
+        // DB::table("roles")->insert([
+        //     "name" => "SuperAdmin",
+        //     "state" => 1,
+        //     'created_at' => new DateTime(),
+        //     'updated_at' => new DateTime(),
+        // ]);
 
         DB::table("roles")->insert([
             "name" => "Admin",
-            "user_id" => null,
             "state" => 1,
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
         ]);
 
         DB::table("roles")->insert([
-            "name" => "Secretario",
-            "user_id" => 2,
+            "name" => "Empleado",
             "state" => 1,
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
