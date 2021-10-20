@@ -47,12 +47,13 @@ class UserController extends Controller
         $employee = Employee::create([
             "firstName" => $request["firstName"],
             "lastName" => $request["lastName"],
+            "document" => $request["document"],
             "cellPhone" => $request["cellPhone"],
             "specialty_id" => $request["specialty_id"],
-            "profession_id" =>$request["profession_id"]
+            "profession_id" => $request["profession_id"]
         ]);
 
-      $user = User::create([
+        $user = User::create([
             "email" => $request["user"]["email"],
             "password" =>  Hash::make($request["user"]["password"]),
             "employee_id" => $employee->id,
@@ -76,7 +77,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-   
+    public function show($id)
+    {
+        $user = User::find($id);
+        return response()->json($user, 200);
+    }
 
     /**
      * Update the specified resource in storage.
@@ -93,13 +98,16 @@ class UserController extends Controller
         $user->state =  $request["user"]["state"];
         $user->save();
 
-        $person = Employee::find($user->person_id);
-        $person->firstName = $request["firstName"];
-        $person->lastName = $request["lastName"];
-        $person->cellPhone = $request["cellPhone"];
-        $person->save();
+        $employee = Employee::find($user->employee_id);
+        $employee->firstName = $request["firstName"];
+        $employee->lastName = $request["lastName"];
+        $employee->cellPhone = $request["cellPhone"];
+        $employee->document = $request["document"];
+        $employee->profession_id = $request["profession_id"];
+        $employee->specialty_id = $request["specialty_id"];
+        $employee->save();
 
-        return response()->json($person,200);
+        return response()->json($employee, 200);
     }
 
     /**
@@ -116,11 +124,9 @@ class UserController extends Controller
     public function changeState($id)
     {
         $user = User::find($id);
-        $state = !$user->state;
-        $user->state =  $state;
+        $user->state =  !$user->state;
         $user->save();
 
-        $message = $state == 1 ? "activado" : "desactivado";
         return response()->json($user, 200);
     }
 }

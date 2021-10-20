@@ -13,7 +13,7 @@ class ProfessionController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('jwt.verify', ['except' => ['store', 'index']]);
+        $this->middleware('jwt.verify');
     }
 
     public function index()
@@ -43,7 +43,11 @@ class ProfessionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $profession = new Profession();
+        $profession->name = $request["name"];
+        $profession->save();
+
+        return response()->json($profession, 201);
     }
 
     /**
@@ -54,7 +58,9 @@ class ProfessionController extends Controller
      */
     public function show($id)
     {
-        //
+        $profession = Profession::find($id);
+
+        return response()->json($profession, 200);
     }
 
     /**
@@ -77,7 +83,11 @@ class ProfessionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $profession = Profession::find($id);
+        $profession->name = $request["name"];
+        $profession->save();
+
+        return response()->json($profession, 200);
     }
 
     /**

@@ -21,7 +21,7 @@ class ProfessionSeeder extends Seeder
             'updated_at' => new DateTime(),
         ]);
         DB::table("professions")->insert([
-            "name" => "Medico",
+            "name" => "Enfermera",
             'created_at' => new DateTime(),
             'updated_at' => new DateTime(),
         ]);

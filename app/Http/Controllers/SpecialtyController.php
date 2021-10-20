@@ -2,12 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Permit;
-use App\Models\Role;
-use App\Models\RolePermit;
+use App\Models\Specialty;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class SpecialtyController extends Controller
 {
     public function __construct()
     {
@@ -20,10 +18,11 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::orderBy('id', 'DESC')
-            ->get();
-
-        return response()->json($roles, 200);
+        $specialty = Specialty::all();
+        return response()->json($specialty, 200)->withHeaders([
+            "X-Total-Count" => count($specialty),
+            "Access-Control-Expose-Headers" => "*"
+        ]);
     }
 
     /**
@@ -44,12 +43,12 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = new Role();
-        $role->name = $request["name"];
-        $role->state = 1;
-        $role->save();
+        $specialty = new Specialty();
+        $specialty->name = $request["name"];
+        $specialty->profession_id = $request["profession_id"];
+        $specialty->save();
 
-        return response()->json($role, 201);
+        return response()->json($specialty, 201);
     }
 
     /**
@@ -60,9 +59,9 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        $role = Role::find($id);
+        $specialty = Specialty::find($id);
 
-        return response()->json($role, 200);
+        return response()->json($specialty, 200);
     }
 
     /**
@@ -73,6 +72,7 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
+        //
     }
 
     /**
@@ -84,12 +84,12 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $role = Role::find($id);
-        $role->name = $request["name"];
-        $role->state = 1;
-        $role->save();
+        $specialty = Specialty::find($id);
+        $specialty->name = $request["name"];
+        $specialty->profession_id = $request["profession_id"];
+        $specialty->save();
 
-        return response()->json($role, 200);
+        return response()->json($specialty, 200);
     }
 
     /**
@@ -101,14 +101,5 @@ class RoleController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function changeState($id)
-    {
-        $role = Role::find($id);
-        $role->state =  !$role->state;
-        $role->save();
-
-        return response()->json($role, 200);
     }
 }

@@ -19,8 +19,8 @@ class CreateEmployeesTable extends Migration
             $table->string("lastName");
             $table->string("document");
             $table->string("cellPhone");
+            $table->integer("profession_id")->nullable();
             $table->integer("specialty_id");
-            $table->integer("profession_id");
             $table->timestamps();
         });
     }

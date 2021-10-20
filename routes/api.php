@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Prueba2Controller;
+use App\Http\Controllers\ProfessionController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SpecialtyController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -45,5 +46,7 @@ Route::put("publication/state/{id}", [PublicationController::class, "changeState
 Route::resource("publication", PublicationController::class);
 
 
+Route::resource("profession", ProfessionController::class);
 
-Route::resource("comoyoquiera", Prueba2Controller::class);
+
+Route::resource("specialty", SpecialtyController::class);
