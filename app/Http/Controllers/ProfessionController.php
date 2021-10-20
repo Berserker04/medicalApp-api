@@ -3,17 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-class PermitController extends Controller
+use App\Models\Profession;
+class ProfessionController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function __construct()
+    {
+        $this->middleware('jwt.verify', ['except' => ['store', 'index']]);
+    }
+
     public function index()
     {
-        //
+        $profession = Profession::all();
+        return response()->json($profession, 200)->withHeaders([
+            "X-Total-Count" => count($profession),
+            "Access-Control-Expose-Headers" => "*"
+        ]);
     }
 
     /**

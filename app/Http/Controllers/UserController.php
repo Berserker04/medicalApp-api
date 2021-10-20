@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Person;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,10 +34,7 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -46,23 +44,23 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $person = Person::create([
+        $employee = Employee::create([
             "firstName" => $request["firstName"],
             "lastName" => $request["lastName"],
             "cellPhone" => $request["cellPhone"],
+            "specialty_id" => $request["specialty_id"],
+            "profession_id" =>$request["profession_id"]
         ]);
 
-        User::create([
-            "user_name" => $request["user"]["user_name"],
+      $user = User::create([
             "email" => $request["user"]["email"],
             "password" =>  Hash::make($request["user"]["password"]),
-            "user_id" => isset($request["user"]["user_id"]) ? $request["user"]["user_id"] : null,
-            "person_id" => $person->id,
-            "role_id" => isset($request["user"]["role_id"]) ? $request["user"]["role_id"] : 2,
+            "employee_id" => $employee->id,
+            "role_id" =>  $request["user"]["role_id"],
             "state" => 1,
         ]);
 
-        return response()->json(["ok" => true, "message" => "registro exitoso"], 201);
+        return response()->json($user, 201);
     }
 
     /**
@@ -71,10 +69,6 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -82,10 +76,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
-    }
+   
 
     /**
      * Update the specified resource in storage.
@@ -102,13 +93,13 @@ class UserController extends Controller
         $user->state =  $request["user"]["state"];
         $user->save();
 
-        $person = Person::find($user->person_id);
+        $person = Employee::find($user->person_id);
         $person->firstName = $request["firstName"];
         $person->lastName = $request["lastName"];
         $person->cellPhone = $request["cellPhone"];
         $person->save();
 
-        return response()->json(["ok" => true, "message" => "actualizacion exitosa"], 200);
+        return response()->json($person,200);
     }
 
     /**
@@ -130,6 +121,6 @@ class UserController extends Controller
         $user->save();
 
         $message = $state == 1 ? "activado" : "desactivado";
-        return response()->json(["ok" => true, "message" => "Estado " . $message], 200);
+        return response()->json($user, 200);
     }
 }
