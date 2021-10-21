@@ -50,4 +50,5 @@ Route::put("profession/state/{id}", [ProfessionController::class, "changeState"]
 Route::resource("profession", ProfessionController::class);
 
 
+Route::put("specialty/state/{id}", [SpecialtyController::class, "changeState"]);
 Route::resource("specialty", SpecialtyController::class);

@@ -48,7 +48,11 @@ class ProfessionController extends Controller
         $profession->name = $request["name"];
         $profession->save();
 
-        return response()->json(["ok" => true, "body" => $profession, "message" => "Profesión registrada"], 201);
+        return response()->json([
+            "ok" => true, 
+            "body" => $profession, 
+            "message" => "Profesión registrada"
+        ], 201);
     }
 
     /**

@@ -17,4 +17,14 @@ class Employee extends Model
         'profession_id',
         'specialty_id',
     ];
+
+    public function profession()
+    {
+        return $this->belongsTo(Profession::class);
+    }
+
+    public function specialty()
+    {
+        return $this->belongsTo(Specialty::class);
+    }
 }

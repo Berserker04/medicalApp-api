@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $users = User::with("employee.specialty.profession")->get();
         return response()->json($users, 200)->withHeaders([
             "X-Total-Count" => count($users),
             "Access-Control-Expose-Headers" => "*"
@@ -82,8 +82,13 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
-        return response()->json($user, 200);
+        $user = User::with("employee")->where("id", "=", $id)->get();
+
+        if(count($user)>0){
+            $user = $user[0];
+        }   
+
+        return response()->json(["ok" => true, "body" => $user, "message" => null], 200);
     }
 
     /**
@@ -96,27 +101,35 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
-        $user->password = Hash::make($request["user"]["password"]);
+        
+
+        if($request["user"]["password"] != null){
+            $user->password = Hash::make($request["user"]["password"]);
+        }
+
         $user->role_id = $request["user"]["role_id"];
         $user->state =  $request["user"]["state"];
         $user->save();
 
-        $base_to_php = explode(',', $request["image"]);
-        $image = base64_decode($base_to_php[1]);
-        $imageName = Str::random(40) . '.' . 'jpg';
-        Storage::disk('images')->put($imageName, $image);
-
         $employee = Employee::find($user->employee_id);
+
+        if($employee->image != $request["image"]){
+            $base_to_php = explode(',', $request["image"]);
+            $image = base64_decode($base_to_php[1]);
+            $imageName = Str::random(40) . '.' . 'jpg';
+            Storage::disk('images')->put($imageName, $image);
+            $employee->image = $imageName;
+        }
+        
         $employee->firstName = $request["firstName"];
         $employee->lastName = $request["lastName"];
         $employee->cellPhone = $request["cellPhone"];
         $employee->document = $request["document"];
-        // $employee->image = $request["document"];
         $employee->profession_id = $request["profession_id"];
         $employee->specialty_id = $request["specialty_id"];
         $employee->save();
 
-        return response()->json($employee, 200);
+        return response()->json(["ok" => true, "body" => $employee, "message" => "Usuario actualizado"], 200);
     }
 
     /**
@@ -136,6 +149,6 @@ class UserController extends Controller
         $user->state =  !$user->state;
         $user->save();
 
-        return response()->json($user, 200);
+        return response()->json(["ok" => true, "body" => $user, "message" => "Estado actualizado"], 200);
     }
 }

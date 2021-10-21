@@ -19,7 +19,7 @@ class SpecialtyController extends Controller
      */
     public function index()
     { 
-            $specialty = Specialty::with("profession")->get();
+            $specialty = Specialty::with("profession")->orderByDesc("id")->get();
             return response()->json($specialty, 200);
     }
 
@@ -46,7 +46,11 @@ class SpecialtyController extends Controller
         $specialty->profession_id = $request["profession_id"];
         $specialty->save();
 
-        return response()->json($specialty, 201);
+        return response()->json([
+            "ok" => true, 
+            "body" => $specialty, 
+            "message" => "Especialidad registrada"
+        ], 201);
     }
 
     /**
@@ -87,7 +91,11 @@ class SpecialtyController extends Controller
         $specialty->profession_id = $request["profession_id"];
         $specialty->save();
 
-        return response()->json($specialty, 200);
+        return response()->json([
+            "ok" => true, 
+            "body" => $specialty, 
+            "message" => "Especialidad actualizada"
+        ], 201);
     }
 
     /**
@@ -99,5 +107,14 @@ class SpecialtyController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function changeState($id)
+    {
+        $specialty = Specialty::find($id);
+        $specialty->state =  !$specialty->state;
+        $specialty->save();
+
+        return response()->json(["ok" => true, "body" => $specialty, "message" => "Estado actualizado"], 200);
     }
 }
