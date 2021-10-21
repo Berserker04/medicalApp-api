@@ -17,6 +17,7 @@ class CreateSpecialtiesTable extends Migration
             $table->id();
             $table->string("name");
             $table->integer("profession_id");
+            $table->integer("state")->default(1);
             $table->timestamps();
         });
     }

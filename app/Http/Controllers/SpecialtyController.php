@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Specialty;
 use Illuminate\Http\Request;
+use Throwable;
 
 class SpecialtyController extends Controller
 {
@@ -17,12 +18,9 @@ class SpecialtyController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $specialty = Specialty::all();
-        return response()->json($specialty, 200)->withHeaders([
-            "X-Total-Count" => count($specialty),
-            "Access-Control-Expose-Headers" => "*"
-        ]);
+    { 
+            $specialty = Specialty::with("profession")->get();
+            return response()->json($specialty, 200);
     }
 
     /**

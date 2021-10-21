@@ -7,6 +7,8 @@ use App\Models\Person;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -49,6 +51,7 @@ class UserController extends Controller
             "lastName" => $request["lastName"],
             "document" => $request["document"],
             "cellPhone" => $request["cellPhone"],
+            "image" => "avatar.png",
             "specialty_id" => $request["specialty_id"],
             "profession_id" => $request["profession_id"]
         ]);
@@ -98,11 +101,17 @@ class UserController extends Controller
         $user->state =  $request["user"]["state"];
         $user->save();
 
+        $base_to_php = explode(',', $request["image"]);
+        $image = base64_decode($base_to_php[1]);
+        $imageName = Str::random(40) . '.' . 'jpg';
+        Storage::disk('images')->put($imageName, $image);
+
         $employee = Employee::find($user->employee_id);
         $employee->firstName = $request["firstName"];
         $employee->lastName = $request["lastName"];
         $employee->cellPhone = $request["cellPhone"];
         $employee->document = $request["document"];
+        // $employee->image = $request["document"];
         $employee->profession_id = $request["profession_id"];
         $employee->specialty_id = $request["specialty_id"];
         $employee->save();

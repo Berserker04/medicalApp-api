@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Profession;
+
 class ProfessionController extends Controller
 {
     /**
@@ -18,7 +19,7 @@ class ProfessionController extends Controller
 
     public function index()
     {
-        $profession = Profession::all();
+        $profession = Profession::orderByDesc("id")->get();
         return response()->json($profession, 200)->withHeaders([
             "X-Total-Count" => count($profession),
             "Access-Control-Expose-Headers" => "*"
@@ -47,7 +48,7 @@ class ProfessionController extends Controller
         $profession->name = $request["name"];
         $profession->save();
 
-        return response()->json($profession, 201);
+        return response()->json(["ok" => true, "body" => $profession, "message" => "Profesión registrada"], 201);
     }
 
     /**
@@ -87,7 +88,7 @@ class ProfessionController extends Controller
         $profession->name = $request["name"];
         $profession->save();
 
-        return response()->json($profession, 200);
+        return response()->json(["ok" => true, "body" => $profession, "message" => "Profesión actalizada"], 200);
     }
 
     /**
@@ -99,5 +100,14 @@ class ProfessionController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function changeState($id)
+    {
+        $profession = Profession::find($id);
+        $profession->state =  !$profession->state;
+        $profession->save();
+
+        return response()->json(["ok" => true, "body" => $profession, "message" => "Estado actualizado"], 200);
     }
 }

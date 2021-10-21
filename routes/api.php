@@ -46,6 +46,7 @@ Route::put("publication/state/{id}", [PublicationController::class, "changeState
 Route::resource("publication", PublicationController::class);
 
 
+Route::put("profession/state/{id}", [ProfessionController::class, "changeState"]);
 Route::resource("profession", ProfessionController::class);
 
 
