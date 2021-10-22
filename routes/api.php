@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfessionController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SpecialtyController;
+use App\Http\Controllers\TurnController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -52,3 +54,8 @@ Route::resource("profession", ProfessionController::class);
 
 Route::put("specialty/state/{id}", [SpecialtyController::class, "changeState"]);
 Route::resource("specialty", SpecialtyController::class);
+
+
+Route::get("home", [HomeController::class, "index"]);
+
+Route::resource("turn", TurnController::class);

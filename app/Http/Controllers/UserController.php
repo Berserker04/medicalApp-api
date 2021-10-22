@@ -24,7 +24,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with("employee.specialty.profession")->get();
+        $users = User::with("employee.specialty.profession")->where("role_id", "=", 2)->get();
         return response()->json($users, 200)->withHeaders([
             "X-Total-Count" => count($users),
             "Access-Control-Expose-Headers" => "*"
@@ -64,7 +64,7 @@ class UserController extends Controller
             "state" => 1,
         ]);
 
-        return response()->json($user, 201);
+        return response()->json(["ok" => true, "body" => $employee, "message" => "Empleado registrado"], 201);
     }
 
     /**
@@ -82,7 +82,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = User::with("employee")->where("id", "=", $id)->get();
+        $user = User::with("employee.specialty.profession")->where("id", "=", $id)->get();
 
         if(count($user)>0){
             $user = $user[0];
