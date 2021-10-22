@@ -37,7 +37,7 @@ class TurnController extends Controller
     public function store(Request $request)
     {
         $employees = User::where("role_id", "=", 2)->get();
-        $auxEmployees = User::where("role_id", "=", 2)->get();
+        $auxEmployees = $employees;
         $totalEmployees = count($employees);
 
         $totalPatients = $request["totalPatients"];
